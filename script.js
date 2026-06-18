@@ -1,18 +1,35 @@
 const video = document.querySelector("video");
+const btn = document.querySelector("button");
+
+let stream = null;
 
 async function startCamera() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({
+    stream = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: false
     });
-    console.log(stream);
-    
+
     video.srcObject = stream;
-    video.style.transform = "scaleX(-1)";
   } catch (err) {
     console.error("Camera access denied:", err);
   }
 }
 
-startCamera();
+function stopCamera() {
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+    video.srcObject = null;
+    stream = null;
+  }
+}
+
+btn.addEventListener("click", async () => {
+  btn.classList.toggle("active");
+
+  if (btn.classList.contains("active")) {
+    await startCamera();
+  } else {
+    stopCamera();
+  }
+});
