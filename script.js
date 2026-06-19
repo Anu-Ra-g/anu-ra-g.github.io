@@ -29,6 +29,7 @@ btn.addEventListener("click", async () => {
 
   if (btn.classList.contains("active")) {
     await startCamera();
+    btn.style.display = "none";
   } else {
     stopCamera();
   }
